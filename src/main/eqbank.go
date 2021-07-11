@@ -56,25 +56,32 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	}}
 func loginHandler(w http.ResponseWriter, r *http.Request) {
   //model:= User{}
-  if r.URL.Path != "/login" || r.Method!=http.MethodPost {
+  if r.URL.Path != "/login" || r.Method != http.MethodPost {
     http.NotFound(w, r)
-    return}
+    return
+  }
   err := r.ParseForm()
-  if err != nil {log.Fatal(err)}
-  login:= User{
+  if err != nil {
+    log.Fatal(err)
+  }
+  login := User{
     Username: r.FormValue("uname"),
     Password: r.FormValue("pwd")}
-  welcome,_:= json.Marshal(login)
+  welcome, _ := json.Marshal(login)
 
   fmt.Println(string(welcome))
+  var path string
+  if len(login.Password) < 4 {
+    path="./front-end/templates/birthday.html" //RIGHT NOW WE DO BIRTHDAY
+    } else { path="./front-end/templates/main.html"}
 
-  html, _:= template.ParseFiles("./front-end/templates/birthday.html") //RIGHT NOW WE DO BIRTHDAY
-  err= html.Execute(w,login)
-  if err != nil {
-    w.WriteHeader(http.StatusInternalServerError)
-    log.Fatal(err)
-  }}
-
+  html, _ := template.ParseFiles(path)
+  err = html.Execute(w, login)
+    if err != nil {
+      w.WriteHeader(http.StatusInternalServerError)
+      log.Fatal(err)
+    }
+  }
 //START
 func main() {
   jocAdmin() //Add to database

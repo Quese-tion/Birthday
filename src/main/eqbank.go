@@ -9,21 +9,6 @@ import (
   "os"
 )
 
-//DAO MODELING
-type Admin interface{}
-type User struct { //USER Data Model
-  Username string `json:"User"`
-  Password string `json:"pwd"`
-  Name string `json:"full_name"`
-  ID int `json:"id"`
-  Role string `json:"role"`
-  //Age int `json:"age"`
-  Accounts []int `json:"accounts"`
-
-  //Active bool `json:"active"`
-  //lastLoginAt string
-}
-
 //TESTING MODULE
 func jocAdmin() []byte { //Can Marshal/UnMarshal JSON to Struct, vice versa
   model:= User{}
@@ -41,7 +26,6 @@ func jocAdmin() []byte { //Can Marshal/UnMarshal JSON to Struct, vice versa
   fmt.Println(string(u),"\n",n, "\n", model) // {"Name":"Bob","Age":10,"Active":true}
   return u
 }
-
 //ROUTING TABLE
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
@@ -82,7 +66,8 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
       log.Fatal(err)
     }
   }
-//START
+
+  //START
 func main() {
   jocAdmin() //Add to database
   http.HandleFunc("/", indexHandler)
